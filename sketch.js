@@ -71,6 +71,7 @@ function setup() {
   //The colors are: [0]navy blue, [1]sea green, [2]bright yellow, [3]orange red, [4]dark red
   waterColorsFrom.push(
     //color(205, 74, 74),
+    // color(random(255),random(255),random(255)),
     color(193, 113, 67),
     color(255, 214, 101),
     color(125, 155, 147),
@@ -128,10 +129,9 @@ function generateColor(type,colorLerp,num,r){
 function draw() {
   background(255);
 
-  // fill(0);
-  // ellipse(mouseX,mouseY,50);
-
+  //use mouseX to move the building, the shadow of it and the blurry scenery
   mouseXOffset=map(mouseX,0,width,50,-50);
+
   mouseYOffset=map(mouseY,0,height,50,-50);
 
   drawSkyEllipse();
@@ -143,26 +143,20 @@ function draw() {
   strokeWeight(2);
   stroke(43,49,45);
 
-  drawBuilding(mouseXOffset, mouseYOffset);
+  drawBuilding(mouseXOffset);
  
-  waterColor(polyShadow,71,41,50,20,mouseXOffset, mouseYOffset);
-  waterColor(polyBlurry1,20,70,10,10,mouseXOffset, mouseYOffset);//transition
-  waterColor(polyBlurry2,40,90,30,5,mouseXOffset, mouseYOffset);//distant building
+  waterColor(polyShadow,71,41,50,20,mouseXOffset);
+  waterColor(polyBlurry1,20,70,10,10,mouseXOffset);//transition
+  waterColor(polyBlurry2,40,90,30,5,mouseXOffset);//distant building
 }
 
-function drawBuilding(xOffset,yOffset){
+function drawBuilding(xOffset){
 
   push();
-  translate(xOffset,yOffset);
-  // beginShape();
-  // vertex(0,16*unitY);
-  // vertex(0,13.8*unitY);
-  // vertex(5*unitX,11*unitY);
-  // endShape(CLOSE);
-  
+  translate(xOffset,0);
    //the building
    beginShape();
-   vertex(0,16*unitY);
+   vertex(-50,16*unitY);
    vertex(0,13.8*unitY);
    vertex(unitX,13.8*unitY);
    vertex(2*unitX,11*unitY);
@@ -195,52 +189,9 @@ function drawBuilding(xOffset,yOffset){
    pop();
 }
 
-function waterSurface(){
-  push();
-  randomSeed(45);
-  translate(0, windowHeight/ 2);
-  let yoff = 0;
-  for (let y = 0; y < rows / 2; y++) {//"i" stands for "y"
-    let xoff= 0;
-    for (let x = 0; x < cols; x++) {//"j" stands for "x"
-      let angle = noise(xoff, yoff) * TWO_PI;
-      let v = p5.Vector.fromAngle(angle * -0.2);
-      xoff += inc;
-      //rect(x*scl,y*scl,scl,scl);
-      noStroke();
-
-      push();
-      translate(x * scl, y * scl);
-      rotate(v.heading());
-      rect(0, 0, 23, 4);
-      pop();
-    }
-
-    if (y < 14) {
-      fill(waterColorsLerpA[y%8]);
-    } 
-
-    else if (y>=14 && y<27){
-      fill(waterColorsLerpB[y % 8]);  
-    }
-    else if (y>=27 && y<=50) {
-      fill(waterColorsLerpC[y % 8]);
- 
-    } 
-    else {
-      fill(waterColorsLerpD[y % 8]);
-      
-    }
-    yoff += inc; 
-  }
-
-  //reference web:https://www.youtube.com/watch?v=BjoM9oKOAKY&t=3s.
-  pop();
-}
-
 function shadow(){
   const v=[];
-  v.push(createVector(0,15.5*unitY));
+  v.push(createVector(-50,15.5*unitY));
   v.push(createVector(unitX,15.5*unitY));
   v.push(createVector(3*unitX,15*unitY));
   v.push(createVector(4.9*unitX,15*unitY));
@@ -252,7 +203,7 @@ function shadow(){
   v.push(createVector(11.2*unitX,15.2*unitY));
   v.push(createVector(12*unitX,15.3*unitY));
   v.push(createVector(15*unitX,14.3*unitY));
-  v.push(createVector(15.5*unitX,15.5*unitY));
+  v.push(createVector(15.9*unitX,15.5*unitY));
   polyShadow=new Poly(v);
 }
 
@@ -271,13 +222,15 @@ function blurryBg1(){
 function blurryBg2(){
   const v=[];
   v.push(createVector(24*unitX,16*unitY));
-  for (let i=0;i<random(10);i++){
-    let xScale=constrain(random(24,32)*i/2,24,32);
+  let increment=0;
+  for (let i=0;i<random(20);i++){
+    let xScale=constrain(random(24,32)*increment/2,24,82);
     //let xScale=random(24,32)*i/2;
-    let yScale=random(5,16);
+    let yScale=random(15,16);
     v.push(createVector(xScale*unitX,yScale*unitY));
+    increment++;
   }
-  v.push(createVector(32*unitX,16*unitY));
+  v.push(createVector(82*unitX,16*unitY));
   polyBlurry2=new Poly(v);
 }
 
@@ -330,6 +283,7 @@ class Poly{
   }
 
   draw(){
+
     beginShape();
     for(let v of this.vertices){
       vertex(v.x,v.y);
@@ -338,22 +292,25 @@ class Poly{
   }
 }
 
-function waterColor(poly,r,g,b,numLayers,xOffset, yOffset){
+function waterColor(poly,r,g,b,numLayers,xOffset){
   //const numLayers=20;
   fill(r,g,b,255/(2*numLayers));
   //fill(red(color),green(color),blue(color),255/(2*numLayers));
   noStroke();
 
   poly=poly.grow().grow();
-  poly.vertices = poly.vertices.map((v) => createVector(v.x + xOffset, v.y + yOffset));
+  poly.vertices = poly.vertices.map((v) => createVector(v.x + xOffset, v.y));
 
   for(let i=0;i<numLayers;i++){
     if(i==int(numLayers/3) || i==int(2*numLayers/3)){
       poly=poly.grow().grow();
-      poly.vertices = poly.vertices.map((v) => createVector(v.x + xOffset, v.y + yOffset));
+      poly.vertices = poly.vertices.map((v) => createVector(v.x + xOffset, v.y));
 
     }
+    push();
+    //translate(xOffset,0);
     poly.grow().draw();
+    pop();
   }
 }
 
@@ -390,6 +347,48 @@ function drawEllipse(lerpEllipse,colorArray,r){
       lerpEllipse.push(ellipse(brushWidth/2+brushWidth*j,brushWidth/2+brushWidth*(i+r),brushWidth));
     }
   }
+}
+
+function waterSurface(){
+  push();
+  randomSeed(45);
+  translate(0, windowHeight/ 2);
+  let yoff = 0;
+  for (let y = 0; y < rows / 2; y++) {
+    let xoff= 0;
+    for (let x = 0; x < cols; x++) {
+      let angle = noise(xoff, yoff) * TWO_PI;
+      let v = p5.Vector.fromAngle(angle * -0.2);
+      xoff += mouseY;
+      //xoff += inc;
+      //rect(x*scl,y*scl,scl,scl);
+      noStroke();
+      push();
+      translate(x * scl, y * scl);
+      rotate(v.heading());
+      rect(0, 0, 23, 4);
+      pop();
+    }
+
+    if (y < 14) {
+      fill(waterColorsLerpA[y%8]);
+    } 
+
+    else if (y>=14 && y<27){
+      fill(waterColorsLerpB[y % 8]);  
+    }
+    else if (y>=27 && y<=50) {
+      fill(waterColorsLerpC[y % 8]);
+ 
+    } 
+    else {
+      fill(waterColorsLerpD[y % 8]);
+      
+    }
+    yoff += inc; 
+  }
+  //reference web:https://www.youtube.com/watch?v=BjoM9oKOAKY&t=3s.
+  pop();
 }
 
 //update the sizes of variables
