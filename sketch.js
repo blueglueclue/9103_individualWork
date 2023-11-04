@@ -28,14 +28,17 @@ let unitY;
 let w;
 let h;
 
+let iniCol;
+let showingCol;
+
 let polyShadow;
 let polyBlurry1;//the transition part between building and distant building
 let polyBlurry2;//the distant building
 
-
 let mouseXOffset=0;
 let mouseYOffset=0;
 
+let showSky=false;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
@@ -43,8 +46,7 @@ function setup() {
   //Define the color arrays for lerpColor().
 
   //The colors are: [0]navy blue, [1]sea green, [2]bright yellow, [3]orange red, [4]dark red
-  skyColorsFrom.push(color(62, 84, 143), color(125, 155, 147), color(255, 214, 101), 
-  color(193, 113, 67), color(205, 74, 74));
+  skyColorsFrom.push(color(62, 84, 143), color(125, 155, 147), color(255, 214, 101), color(193, 113, 67), color(205, 74, 74));
 
   //The colors are: [0]sea green, [1]bright yellow, [2]orange red
   skyColorsTo.push(color(125, 155, 147), color(255, 214, 101), color(193, 113, 67), color(205, 74, 74));
@@ -76,7 +78,6 @@ function setup() {
     color(255, 214, 101),
     color(125, 155, 147),
     color(62, 84, 143)
-
   );
 
   //The colors are: [0]sea green, [1]bright yellow, [2]orange red
@@ -100,6 +101,9 @@ function setup() {
   unitX=w/32;//unit coordinate for x
   unitY=h/32;//unit coordinate for y
 
+  iniCol=(255,255,255,255);
+  showingCol=(255,255,255,0);
+
   shadow();
   blurryBg1();//transition
   blurryBg2();//distant building
@@ -116,13 +120,11 @@ function generateColor(type,colorLerp,num,r){
     for (let i=1;i<r;i++){
       colorLerp.push(lerpColor(skyColorsFrom[num],skyColorsTo[num],i*0.125));
     }
-    
   }
   else if (type==2){
     for (let i=1;i<r;i++){
       colorLerp.push(lerpColor(waterColorsFrom[num],waterColorsTo[num],i*0.125));
     }
-    
   }
 }
 
@@ -134,7 +136,15 @@ function draw() {
 
   mouseYOffset=map(mouseY,0,height,50,-50);
 
+  // if(showSky){
+  //   drawSkyEllipse();
+  // }
   drawSkyEllipse();
+
+  // fill(255);
+  // rect(0,0,w,h);
+
+  //showingSky();
 
   waterSurface();
 
@@ -149,6 +159,31 @@ function draw() {
   waterColor(polyBlurry1,20,70,10,10,mouseXOffset);//transition
   waterColor(polyBlurry2,40,90,30,5,mouseXOffset);//distant building
 }
+
+// function showingSky(){
+//   noStroke();
+  
+//   iniCol=lerpColor(iniCol,showingCol,0.01);
+  
+//   fill(iniCol);
+//   if(mouseIsPressed===true){
+//     ellipse(random(w),random(h),random(20));
+//   }
+// }
+
+// function mousePressed(){
+//   // noStroke();
+  
+//   // iniCol=lerpColor(iniCol,showingCol,0.01);
+  
+//   // fill(iniCol);
+//   // if(mouseIsPressed===true){
+//   //   ellipse(random(w),random(h),random(20));
+//   // }
+//   showSky=true;
+
+
+// }
 
 function drawBuilding(xOffset){
 
@@ -359,7 +394,7 @@ function waterSurface(){
     for (let x = 0; x < cols; x++) {
       let angle = noise(xoff, yoff) * TWO_PI;
       let v = p5.Vector.fromAngle(angle * -0.2);
-      xoff += mouseY;
+      xoff += mouseY/100;
       //xoff += inc;
       //rect(x*scl,y*scl,scl,scl);
       noStroke();
