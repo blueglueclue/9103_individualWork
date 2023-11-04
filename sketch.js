@@ -126,7 +126,7 @@ function generateColor(type,colorLerp,num,r){
 }
 
 function draw() {
-  //background(255);
+  background(255);
 
   // fill(0);
   // ellipse(mouseX,mouseY,50);
@@ -365,38 +365,6 @@ function distribute(x){
   return pow((x-0.5)*1.58740105,3)+0.5;
 }
 
-
-// 更新尺寸相关的变量
-function updateDimensions() {
-  w = width;
-  h = height;
-  unitX = w / 32;
-  unitY = h / 32;
-
-  shadow();
-  blurryBg1();
-  blurryBg2();
-}
-
-function updateWater(){
-  scl = windowHeight / 140;
-  cols = windowWidth / scl;
-  rows = windowHeight / scl;
-  yoff = 0;
-}
-
-// 响应窗口大小变化
-function windowResized() {
-  clear();
-  brushWidth = height / 64;
-  brushAmount = width / brushWidth;
-  drawSkyEllipse();
-  updateDimensions();
-  updateWater();
-  resizeCanvas(windowWidth, windowHeight);
-  
-}
-
 //Draw the first line of ellipses using lerpColor() and color arrays.
 function drawSkyEllipse() {
   for (let i = 0; i < skyColorsFrom.length; i++) {
@@ -422,4 +390,35 @@ function drawEllipse(lerpEllipse,colorArray,r){
       lerpEllipse.push(ellipse(brushWidth/2+brushWidth*j,brushWidth/2+brushWidth*(i+r),brushWidth));
     }
   }
+}
+
+//update the sizes of variables
+function updateDimensions() {
+  w = width;
+  h = height;
+  unitX = w / 32;
+  unitY = h / 32;
+
+  shadow();
+  blurryBg1();
+  blurryBg2();
+}
+
+function updateWater(){
+  scl = windowHeight / 140;
+  cols = windowWidth / scl;
+  rows = windowHeight / scl;
+  yoff = 0;
+}
+
+//resize the window
+function windowResized() {
+  clear();
+  brushWidth = height / 64;
+  brushAmount = width / brushWidth;
+  drawSkyEllipse();
+  updateDimensions();
+  updateWater();
+  resizeCanvas(windowWidth, windowHeight);
+  
 }
