@@ -111,9 +111,6 @@ function setup() {
   unitX=w/32;//unit coordinate for x
   unitY=h/32;//unit coordinate for y
 
-  // iniCol=(255,255,255,255);
-  // showingCol=(255,255,255,0);
-
   shadow();
   blurryBg1();//transition
   blurryBg2();//distant building
@@ -150,26 +147,13 @@ function draw() {
 
   mouseYOffset=map(mouseY,0,height,50,-50);
 
-  // if(showSky){
-  //   drawSkyEllipse();
-  // }
   drawSkyEllipse();
-
-  // fill(255);
-  // rect(0,0,w,h);
-
-  //showingSky();
 
   waterSurface();
 
-  // //color of building
-  // fill(71,41,50);
   strokeWeight(2);
   stroke(43,49,45,120);
 
-  //noStroke();
-
-  //drawBuilding(mouseXOffset);
   fill(94,63,79);
   drawBuilding(mouseXOffset*3, building1);
 
@@ -380,9 +364,7 @@ class Poly{
 }
 
 function waterColor(poly,r,g,b,numLayers,xOffset){
-  //const numLayers=20;
   fill(r,g,b,255/(2*numLayers));
-  //fill(red(color),green(color),blue(color),255/(2*numLayers));
   noStroke();
 
   poly=poly.grow().grow();
@@ -395,7 +377,6 @@ function waterColor(poly,r,g,b,numLayers,xOffset){
 
     }
     push();
-    //translate(xOffset,0);
     poly.grow().draw();
     pop();
   }
@@ -413,6 +394,7 @@ function mouseDragged(){
   let mousePos=map(mouseX,0,w,16,64);
   rectWidth=height/mousePos;
   rectAmount=width/rectWidth;
+
 }
 
 //Draw the first line of ellipses using lerpColor() and color arrays.
@@ -461,20 +443,8 @@ function drawRect(num,r){
       rect(rectWidth*j,rectWidth*(i+r),rectWidth);
     }
   }
-  // for (let i=0;i<(h/8);i++){
-  //   let amt=i/20;
-  //   let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num],amt);
-  //   fill(currentSkyCol);
-  //   rect()
-  // }
-  //let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num])
 }
-// function generateColor(type,colorLerp,num,r){
-//   if(type==1){
-//     for (let i=1;i<r;i++){
-//       colorLerp.push(lerpColor(skyColorsFrom[num],skyColorsTo[num],i*0.125));
-//     }
-//   }
+
 
 function waterSurface(){
   push();
@@ -554,5 +524,4 @@ function windowResized() {
   updateDimensions();
   updateWater();
   resizeCanvas(windowWidth, windowHeight);
-  
 }
