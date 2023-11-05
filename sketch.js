@@ -1,14 +1,14 @@
+//to store the basic colors of each parts of the sky
 let skyColorsFrom = [];
 let skyColorsTo = [];
+
+//arrays to store different colors for each part of the sky
 let skyColorsLerpA = [];
 let skyColorsLerpB = [];
 let skyColorsLerpC = [];
 let skyColorsLerpD = [];
-let skyEllipse = [];
-let skyLerpEllipseA = [];
-let skyLerpEllipseB = [];
-let skyLerpEllipseC = [];
-let skyLerpEllipseD = [];
+
+//use brush to draw the sky
 let brushWidth;
 let brushAmount;
 
@@ -16,20 +16,20 @@ let inc = 0.1;
 let scl; //segmet size
 let cols, rows;
 
+//to store the basic colors of each parts of the water
 let waterColorsFrom = [];
 let waterColorsTo = [];
+
+//arrays to store different colors for each part of the water
 let waterColorsLerpA = [];
 let waterColorsLerpB = [];
 let waterColorsLerpC = [];
 let waterColorsLerpD = [];
 
-let unitX;
-let unitY;
+let unitX;//unit coordinate for x to scale correctly when resizing the window
+let unitY;//unit coordinate for y to scale correctly when resizing the window
 let w;
 let h;
-
-// let iniCol;
-// let showingCol;
 
 //divide the building into 4 parts for the parallex effect
 let building1;
@@ -37,22 +37,18 @@ let building2;
 let building3;
 let building4;
 
+//use class to manage the watercolor effect
 let polyShadow;
-let polyBlurry1;//the transition part between building and distant building
-let polyBlurry2;//the distant building
+let polyBlurry1;
+let polyBlurry2;
 
+//for the parallax effect
 let mouseXOffset=0;
-let mouseYOffset=0;
-
-//let showSky=false;
-
-let rectWidth=0;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
 
   //Define the color arrays for lerpColor().
-
   //The colors are: [0]navy blue, [1]sea green, [2]bright yellow, [3]orange red, [4]dark red
   skyColorsFrom.push(color(62, 84, 143), color(125, 155, 147), color(255, 214, 101), color(193, 113, 67), color(205, 74, 74));
 
@@ -61,7 +57,6 @@ function setup() {
 
   //Build four arrays: skyColorLerp A/B/C/D to contain the lerpColor() results between the 
   //skyColorsFrom[] and skyColorsTo[]
-
   generateColor(1,skyColorsLerpA,0,8);
   generateColor(1,skyColorsLerpB,1,8);
   generateColor(1,skyColorsLerpC,2,8);
@@ -78,12 +73,10 @@ function setup() {
   scl = windowHeight/140;//size of segment
   cols=windowWidth/scl;
   rows=windowHeight/scl;
-  //Define the color arrays for lerpColor().
 
+  //Define the color arrays for lerpColor().
   //The colors are: [0]navy blue, [1]sea green, [2]bright yellow, [3]orange red, [4]dark red
   waterColorsFrom.push(
-    //color(205, 74, 74),
-    // color(random(255),random(255),random(255)),
     color(193, 113, 67),
     color(255, 214, 101),
     color(125, 155, 147),
@@ -100,7 +93,6 @@ function setup() {
 
   //Build four arrays: skyColorLerp A/B/C/D to contain the lerpColor() results between the
   //skyColorsFrom[] and skyColorsTo[]
-
   generateColor(2,waterColorsLerpA,0,9);
   generateColor(2,waterColorsLerpB,1,9);
   generateColor(2,waterColorsLerpC,2,9);
@@ -108,31 +100,30 @@ function setup() {
 
   w=windowWidth;
   h=windowHeight;
-  unitX=w/32;//unit coordinate for x
-  unitY=h/32;//unit coordinate for y
+  unitX=w/32;
+  unitY=h/32;
 
   shadow();
-  blurryBg1();//transition
-  blurryBg2();//distant building
+  blurryBg1();
+  blurryBg2();
   createBuilding1();
   createBuilding2();
   createBuilding3();
   createBuilding4();
-
-  //noLoop();
 }
 
+//generate colors for sky and water
 //type: 1=sky;2=water
 //colorLerp: array for colors
 //num: number of each array
 //r: row
 function generateColor(type,colorLerp,num,r){
-  if(type==1){
+  if(type==1){//colors for sky
     for (let i=1;i<r;i++){
       colorLerp.push(lerpColor(skyColorsFrom[num],skyColorsTo[num],i*0.125));
     }
   }
-  else if (type==2){
+  else if (type==2){//colors for water
     for (let i=1;i<r;i++){
       colorLerp.push(lerpColor(waterColorsFrom[num],waterColorsTo[num],i*0.125));
     }
@@ -145,15 +136,15 @@ function draw() {
   //use mouseX to move the building, the shadow of it and the blurry scenery
   mouseXOffset=map(mouseX,0,width,50,-50);
 
-  mouseYOffset=map(mouseY,0,height,50,-50);
-
-  drawSkyEllipse();
+  drawSky();
 
   waterSurface();
 
+  //for buildings
   strokeWeight(2);
   stroke(43,49,45,120);
 
+  //different parts of the building will move at different speeds by different offsets
   fill(94,63,79);
   drawBuilding(mouseXOffset*3, building1);
 
@@ -166,6 +157,7 @@ function draw() {
   fill(130,65,46);
   drawBuilding(mouseXOffset, building4);
  
+  //draw watercolor
   waterColor(polyShadow,71,41,50,20,mouseXOffset);
   waterColor(polyBlurry1,20,70,10,10,mouseXOffset);//transition
   waterColor(polyBlurry2,40,90,30,5,mouseXOffset);//distant building
@@ -179,6 +171,7 @@ function drawBuilding(xOffset,building){
   pop();
 }
 
+//hard-code the outline of the buildings
 function createBuilding1(){
   const v=[];
   v.push(createVector(-150,16*unitY));
@@ -279,10 +272,13 @@ function shadow(){
   polyShadow=new Poly(v);
 }
 
+//to make the visual effect more vividly, the outline of blurry scenery will be randomly generated
+//but the start and end vertices are fixed to make the transition look more natural
 function blurryBg1(){
   const v=[];
   v.push(createVector(16*unitX,16*unitY));
   for (let i=0;i<random(5);i++){
+    //use random scales to achieve the random outline
     let xScale=random(16,24);
     let yScale=random(15,16);
     v.push(createVector(xScale*unitX,yScale*unitY));
@@ -297,7 +293,6 @@ function blurryBg2(){
   let increment=0;
   for (let i=0;i<random(20);i++){
     let xScale=constrain(random(24,32)*increment/2,24,82);
-    //let xScale=random(24,32)*i/2;
     let yScale=random(15,16);
     v.push(createVector(xScale*unitX,yScale*unitY));
     increment++;
@@ -306,6 +301,8 @@ function blurryBg2(){
   polyBlurry2=new Poly(v);
 }
 
+//reference web for the watercolor part below:
+//https://www.youtube.com/watch?v=olXv8GOfpNw
 class Poly{
   constructor(vertices,modifiers){
     this.vertices=vertices;
@@ -370,6 +367,8 @@ function waterColor(poly,r,g,b,numLayers,xOffset){
   poly=poly.grow().grow();
   poly.vertices = poly.vertices.map((v) => createVector(v.x + xOffset, v.y));
 
+  //"numLayers" controlls the watercolor rendering effect
+  //more layers reinforce the rendering effect
   for(let i=0;i<numLayers;i++){
     if(i==int(numLayers/3) || i==int(2*numLayers/3)){
       poly=poly.grow().grow();
@@ -390,62 +389,39 @@ function distribute(x){
   return pow((x-0.5)*1.58740105,3)+0.5;
 }
 
+//when mouse is dragged, the sky color will change through the change of the brush size
 function mouseDragged(){
   let mousePos=map(mouseX,0,w,16,64);
-  rectWidth=height/mousePos;
-  rectAmount=width/rectWidth;
-
+  brushWidth=height/mousePos;
+  brushAmount=width/brushWidth;
 }
 
-//Draw the first line of ellipses using lerpColor() and color arrays.
-function drawSkyEllipse() {
-  // if(mouseIsPressed===true){
-  //   brushWidth=height/random(30);
-  // }
-
-  // for (let i = 0; i < skyColorsFrom.length; i++) {
-  //   for (let j = 0; j < brushAmount; j++) {
-  //     noStroke();
-  //     fill(skyColorsFrom[i]);
-  //     skyEllipse.push(ellipse(brushWidth / 2 + brushWidth * j, brushWidth / 2 + height / 8 * i, brushWidth));
-  //   }
-  // }
-  //drawEllipse(skyLerpEllipseA,skyColorsLerpA,1);
+//draw the basic sky
+function drawSky(){
   drawRect(0,0);
-  //drawEllipse(skyLerpEllipseB,skyColorsLerpB,9);
   drawRect(1,7);
-  //drawEllipse(skyLerpEllipseC,skyColorsLerpC,17);
   drawRect(2,14);
-  //drawEllipse(skyLerpEllipseD,skyColorsLerpD,25);
   drawRect(3,21);
-  drawRect(3,25);
-}
-
-//draw ellipses between each two basic color lines
-//r: rows
-//colorArray: each array for sky
-function drawEllipse(lerpEllipse,colorArray,r){
-  for(let i=0;i<7;i++){
-    for(let j=0;j<brushAmount;j++){
-      fill(colorArray[i]);
-      lerpEllipse.push(ellipse(brushWidth/2+brushWidth*j,brushWidth/2+brushWidth*(i+r),brushWidth));
-    }
-  }
+  drawRect(3,28);
+  drawRect(3,35);
+  drawRect(3,42);
+  drawRect(3,49);
 }
 
 //num: the number of each pair of sky colors
+//r: rows that need to be drawn
 function drawRect(num,r){
   for(let i=0;i<7;i++){
-    for (let j=0;j<rectAmount;j++){
+    for (let j=0;j<brushAmount;j++){
       let amt=i/7;
       let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num],amt);
       fill(currentSkyCol);
-      rect(rectWidth*j,rectWidth*(i+r),rectWidth);
+      rect(brushWidth*j,brushWidth*(i+r),brushWidth);
     }
   }
 }
 
-
+//the water surface
 function waterSurface(){
   push();
   randomSeed(45);
@@ -456,10 +432,7 @@ function waterSurface(){
     for (let x = 0; x < cols; x++) {
       let angle = noise(xoff, yoff) * TWO_PI;
       let v = p5.Vector.fromAngle(angle * -0.2);
-      xoff += mouseY/100;
-      //xoff+=frameCount/100;
-      //xoff += inc;
-      //rect(x*scl,y*scl,scl,scl);
+      xoff += mouseX/100;
       noStroke();
       push();
       translate(x * scl, y * scl);
@@ -468,6 +441,7 @@ function waterSurface(){
       pop();
     }
 
+    //fill different colors into different parts of the surface
     if (y < 14) {
       fill(waterColorsLerpA[y%8]);
     } 
@@ -483,7 +457,8 @@ function waterSurface(){
       fill(waterColorsLerpD[y % 8]);
       
     }
-    yoff += inc; 
+    //yoff += inc; 
+    yoff+=mouseY/100;
   }
   //reference web:https://www.youtube.com/watch?v=BjoM9oKOAKY&t=3s.
   pop();
@@ -504,9 +479,7 @@ function updateDimensions() {
   createBuilding2();
   createBuilding3();
   createBuilding4();
-}
 
-function updateWater(){
   scl = windowHeight / 140;
   cols = windowWidth / scl;
   rows = windowHeight / scl;
@@ -517,11 +490,7 @@ function updateWater(){
 function windowResized() {
   clear();
   brushWidth = height / 64;
-  rectWidth=height/64;
   brushAmount = width / brushWidth;
-  rectAmount=width/rectWidth;
-  drawSkyEllipse();
   updateDimensions();
-  updateWater();
   resizeCanvas(windowWidth, windowHeight);
 }
