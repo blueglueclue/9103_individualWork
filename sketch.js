@@ -28,8 +28,8 @@ let unitY;
 let w;
 let h;
 
-let iniCol;
-let showingCol;
+// let iniCol;
+// let showingCol;
 
 //divide the building into 4 parts for the parallex effect
 let building1;
@@ -44,7 +44,9 @@ let polyBlurry2;//the distant building
 let mouseXOffset=0;
 let mouseYOffset=0;
 
-let showSky=false;
+//let showSky=false;
+
+let rectWidth=0;
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
@@ -67,9 +69,11 @@ function setup() {
 
   //The brushWidth of the ellipse is 1/64 of the height of canvas.
   brushWidth = height / 64;
+  rectWidth=height/64;
 
   //The amount of brush is the window's width divides the brush's width.
   brushAmount = width / brushWidth;
+  rectAmount=width/rectWidth;
 
   scl = windowHeight/140;//size of segment
   cols=windowWidth/scl;
@@ -107,8 +111,8 @@ function setup() {
   unitX=w/32;//unit coordinate for x
   unitY=h/32;//unit coordinate for y
 
-  iniCol=(255,255,255,255);
-  showingCol=(255,255,255,0);
+  // iniCol=(255,255,255,255);
+  // showingCol=(255,255,255,0);
 
   shadow();
   blurryBg1();//transition
@@ -405,22 +409,32 @@ function distribute(x){
   return pow((x-0.5)*1.58740105,3)+0.5;
 }
 
+function mouseDragged(){
+  let mousePos=map(mouseX,0,w,16,64);
+  rectWidth=height/mousePos;
+  rectAmount=width/rectWidth;
+}
+
 //Draw the first line of ellipses using lerpColor() and color arrays.
 function drawSkyEllipse() {
-  for (let i = 0; i < skyColorsFrom.length; i++) {
-    for (let j = 0; j < brushAmount; j++) {
-      noStroke();
-      fill(skyColorsFrom[i]);
-      skyEllipse.push(ellipse(brushWidth / 2 + brushWidth * j, brushWidth / 2 + height / 8 * i, brushWidth));
-    }
-  }
-  drawEllipse(skyLerpEllipseA,skyColorsLerpA,1);
+  // if(mouseIsPressed===true){
+  //   brushWidth=height/random(30);
+  // }
+
+  // for (let i = 0; i < skyColorsFrom.length; i++) {
+  //   for (let j = 0; j < brushAmount; j++) {
+  //     noStroke();
+  //     fill(skyColorsFrom[i]);
+  //     skyEllipse.push(ellipse(brushWidth / 2 + brushWidth * j, brushWidth / 2 + height / 8 * i, brushWidth));
+  //   }
+  // }
+  //drawEllipse(skyLerpEllipseA,skyColorsLerpA,1);
   drawRect(0,0);
-  drawEllipse(skyLerpEllipseB,skyColorsLerpB,9);
+  //drawEllipse(skyLerpEllipseB,skyColorsLerpB,9);
   drawRect(1,7);
-  drawEllipse(skyLerpEllipseC,skyColorsLerpC,17);
+  //drawEllipse(skyLerpEllipseC,skyColorsLerpC,17);
   drawRect(2,14);
-  drawEllipse(skyLerpEllipseD,skyColorsLerpD,25);
+  //drawEllipse(skyLerpEllipseD,skyColorsLerpD,25);
   drawRect(3,21);
   drawRect(3,25);
 }
@@ -440,11 +454,11 @@ function drawEllipse(lerpEllipse,colorArray,r){
 //num: the number of each pair of sky colors
 function drawRect(num,r){
   for(let i=0;i<7;i++){
-    for (let j=0;j<brushAmount;j++){
+    for (let j=0;j<rectAmount;j++){
       let amt=i/7;
       let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num],amt);
       fill(currentSkyCol);
-      rect(brushWidth*j,brushWidth*(i+r),brushWidth);
+      rect(rectWidth*j,rectWidth*(i+r),rectWidth);
     }
   }
   // for (let i=0;i<(h/8);i++){
@@ -473,6 +487,7 @@ function waterSurface(){
       let angle = noise(xoff, yoff) * TWO_PI;
       let v = p5.Vector.fromAngle(angle * -0.2);
       xoff += mouseY/100;
+      //xoff+=frameCount/100;
       //xoff += inc;
       //rect(x*scl,y*scl,scl,scl);
       noStroke();
@@ -532,7 +547,9 @@ function updateWater(){
 function windowResized() {
   clear();
   brushWidth = height / 64;
+  rectWidth=height/64;
   brushAmount = width / brushWidth;
+  rectAmount=width/rectWidth;
   drawSkyEllipse();
   updateDimensions();
   updateWater();
