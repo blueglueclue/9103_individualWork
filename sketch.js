@@ -26,8 +26,8 @@ let waterColorsLerpB = [];
 let waterColorsLerpC = [];
 let waterColorsLerpD = [];
 
-let unitX;//unit coordinate for x to scale correctly when resizing the window
-let unitY;//unit coordinate for y to scale correctly when resizing the window
+let unitX; //unit coordinate for x to scale correctly when resizing the window
+let unitY; //unit coordinate for y to scale correctly when resizing the window
 let w;
 let h;
 
@@ -43,36 +43,47 @@ let polyBlurry1;
 let polyBlurry2;
 
 //for the parallax effect
-let mouseXOffset=0;
+let mouseXOffset = 0;
 
 function setup() {
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(windowWidth, windowHeight);
 
   //Define the color arrays for lerpColor().
   //The colors are: [0]navy blue, [1]sea green, [2]bright yellow, [3]orange red, [4]dark red
-  skyColorsFrom.push(color(62, 84, 143), color(125, 155, 147), color(255, 214, 101), color(193, 113, 67), color(205, 74, 74));
+  skyColorsFrom.push(
+    color(62, 84, 143),
+    color(125, 155, 147),
+    color(255, 214, 101),
+    color(193, 113, 67),
+    color(205, 74, 74)
+  );
 
   //The colors are: [0]sea green, [1]bright yellow, [2]orange red
-  skyColorsTo.push(color(125, 155, 147), color(255, 214, 101), color(193, 113, 67), color(205, 74, 74));
+  skyColorsTo.push(
+    color(125, 155, 147),
+    color(255, 214, 101),
+    color(193, 113, 67),
+    color(205, 74, 74)
+  );
 
-  //Build four arrays: skyColorLerp A/B/C/D to contain the lerpColor() results between the 
+  //Build four arrays: skyColorLerp A/B/C/D to contain the lerpColor() results between the
   //skyColorsFrom[] and skyColorsTo[]
-  generateColor(1,skyColorsLerpA,0,8);
-  generateColor(1,skyColorsLerpB,1,8);
-  generateColor(1,skyColorsLerpC,2,8);
-  generateColor(1,skyColorsLerpD,3,8);
+  generateColor(1, skyColorsLerpA, 0, 8);
+  generateColor(1, skyColorsLerpB, 1, 8);
+  generateColor(1, skyColorsLerpC, 2, 8);
+  generateColor(1, skyColorsLerpD, 3, 8);
 
   //The brushWidth of the ellipse is 1/64 of the height of canvas.
   brushWidth = height / 64;
-  rectWidth=height/64;
+  rectWidth = height / 64;
 
   //The amount of brush is the window's width divides the brush's width.
   brushAmount = width / brushWidth;
-  rectAmount=width/rectWidth;
+  rectAmount = width / rectWidth;
 
-  scl = windowHeight/140;//size of segment
-  cols=windowWidth/scl;
-  rows=windowHeight/scl;
+  scl = windowHeight / 140; //size of segment
+  cols = windowWidth / scl;
+  rows = windowHeight / scl;
 
   //Define the color arrays for lerpColor().
   //The colors are: [0]navy blue, [1]sea green, [2]bright yellow, [3]orange red, [4]dark red
@@ -93,15 +104,15 @@ function setup() {
 
   //Build four arrays: skyColorLerp A/B/C/D to contain the lerpColor() results between the
   //skyColorsFrom[] and skyColorsTo[]
-  generateColor(2,waterColorsLerpA,0,9);
-  generateColor(2,waterColorsLerpB,1,9);
-  generateColor(2,waterColorsLerpC,2,9);
-  generateColor(2,waterColorsLerpD,3,9);
+  generateColor(2, waterColorsLerpA, 0, 9);
+  generateColor(2, waterColorsLerpB, 1, 9);
+  generateColor(2, waterColorsLerpC, 2, 9);
+  generateColor(2, waterColorsLerpD, 3, 9);
 
-  w=windowWidth;
-  h=windowHeight;
-  unitX=w/32;
-  unitY=h/32;
+  w = windowWidth;
+  h = windowHeight;
+  unitX = w / 32;
+  unitY = h / 32;
 
   shadow();
   blurryBg1();
@@ -117,15 +128,20 @@ function setup() {
 //colorLerp: array for colors
 //num: number of each array
 //r: row
-function generateColor(type,colorLerp,num,r){
-  if(type==1){//colors for sky
-    for (let i=1;i<r;i++){
-      colorLerp.push(lerpColor(skyColorsFrom[num],skyColorsTo[num],i*0.125));
+function generateColor(type, colorLerp, num, r) {
+  if (type == 1) {
+    //colors for sky
+    for (let i = 1; i < r; i++) {
+      colorLerp.push(
+        lerpColor(skyColorsFrom[num], skyColorsTo[num], i * 0.125)
+      );
     }
-  }
-  else if (type==2){//colors for water
-    for (let i=1;i<r;i++){
-      colorLerp.push(lerpColor(waterColorsFrom[num],waterColorsTo[num],i*0.125));
+  } else if (type == 2) {
+    //colors for water
+    for (let i = 1; i < r; i++) {
+      colorLerp.push(
+        lerpColor(waterColorsFrom[num], waterColorsTo[num], i * 0.125)
+      );
     }
   }
 }
@@ -134,7 +150,7 @@ function draw() {
   background(255);
 
   //use mouseX to move the building, the shadow of it and the blurry scenery
-  mouseXOffset=map(mouseX,0,width,50,-50);
+  mouseXOffset = map(mouseX, 0, width, 50, -50);
 
   drawSky();
 
@@ -142,238 +158,238 @@ function draw() {
 
   //for buildings
   strokeWeight(2);
-  stroke(43,49,45,120);
+  stroke(43, 49, 45, 120);
 
   //different parts of the building will move at different speeds by different offsets
-  fill(94,63,79);
-  drawBuilding(mouseXOffset*3, building1);
+  fill(94, 63, 79);
+  drawBuilding(mouseXOffset * 3, building1);
 
-  fill(104,51,33);
-  drawBuilding(mouseXOffset*2.5, building2);
+  fill(104, 51, 33);
+  drawBuilding(mouseXOffset * 2.5, building2);
 
-  fill(33,74,88);
-  drawBuilding(mouseXOffset*2, building3);
+  fill(33, 74, 88);
+  drawBuilding(mouseXOffset * 2, building3);
 
-  fill(130,65,46);
+  fill(130, 65, 46);
   drawBuilding(mouseXOffset, building4);
- 
+
   //draw watercolor
-  waterColor(polyShadow,71,41,50,20,mouseXOffset);
-  waterColor(polyBlurry1,20,70,10,10,mouseXOffset);//transition
-  waterColor(polyBlurry2,40,90,30,5,mouseXOffset);//distant building
+  waterColor(polyShadow, 71, 41, 50, 20, mouseXOffset);
+  waterColor(polyBlurry1, 20, 70, 10, 10, mouseXOffset); //transition
+  waterColor(polyBlurry2, 40, 90, 30, 5, mouseXOffset); //distant building
 }
 
-
-function drawBuilding(xOffset,building){
+function drawBuilding(xOffset, building) {
   push();
-  translate(xOffset,0);
+  translate(xOffset, 0);
   building.draw();
   pop();
 }
 
 //hard-code the outline of the buildings
-function createBuilding1(){
-  const v=[];
-  v.push(createVector(-150,16*unitY));
-  v.push(createVector(-50,13.8*unitY));
-  v.push(createVector(-26,13.8*unitY));
-  v.push(createVector(-26,12*unitY));
-  v.push(createVector(-1,12*unitY));
-  v.push(createVector(-1,13.8*unitY));
-  v.push(createVector(unitX,13.8*unitY));
-  v.push(createVector(2*unitX,11*unitY));
-  v.push(createVector(3*unitX,11*unitY));
-  v.push(createVector(3.4*unitX,9*unitY));
-  v.push(createVector(4*unitX,11*unitY));
-  v.push(createVector(4.7*unitX,11*unitY));
-  v.push(createVector(5.1*unitX,12*unitY));
-  v.push(createVector(5.1*unitX,16*unitY));
-  building1=new Building(v);
+function createBuilding1() {
+  const v = [];
+  v.push(createVector(-150, 16 * unitY));
+  v.push(createVector(-50, 13.8 * unitY));
+  v.push(createVector(-26, 13.8 * unitY));
+  v.push(createVector(-26, 12 * unitY));
+  v.push(createVector(-1, 12 * unitY));
+  v.push(createVector(-1, 13.8 * unitY));
+  v.push(createVector(unitX, 13.8 * unitY));
+  v.push(createVector(2 * unitX, 11 * unitY));
+  v.push(createVector(3 * unitX, 11 * unitY));
+  v.push(createVector(3.4 * unitX, 9 * unitY));
+  v.push(createVector(4 * unitX, 11 * unitY));
+  v.push(createVector(4.7 * unitX, 11 * unitY));
+  v.push(createVector(5.1 * unitX, 12 * unitY));
+  v.push(createVector(5.1 * unitX, 16 * unitY));
+  building1 = new Building(v);
 }
 
-function createBuilding2(){
-  const v=[];
-  v.push(createVector(3.2*unitX,16*unitY));
-  v.push(createVector(3.2*unitX,13*unitY));
-  v.push(createVector(4.7*unitX,11*unitY));
-  v.push(createVector(4.7*unitX,4*unitY));
-  v.push(createVector(4.9*unitX,4*unitY));
-  v.push(createVector(5.15*unitX,0.5*unitY));
-  v.push(createVector(5.35*unitX,0.5*unitY));
-  v.push(createVector(5.75*unitX,3*unitY));
-  v.push(createVector(6*unitX,4*unitY));
-  v.push(createVector(6*unitX,11.2*unitY));
-  v.push(createVector(6.8*unitX,13.2*unitY));
-  v.push(createVector(6.8*unitX,16*unitY));
-  building2=new Building(v);
+function createBuilding2() {
+  const v = [];
+  v.push(createVector(3.2 * unitX, 16 * unitY));
+  v.push(createVector(3.2 * unitX, 13 * unitY));
+  v.push(createVector(4.7 * unitX, 11 * unitY));
+  v.push(createVector(4.7 * unitX, 4 * unitY));
+  v.push(createVector(4.9 * unitX, 4 * unitY));
+  v.push(createVector(5.15 * unitX, 0.5 * unitY));
+  v.push(createVector(5.35 * unitX, 0.5 * unitY));
+  v.push(createVector(5.75 * unitX, 3 * unitY));
+  v.push(createVector(6 * unitX, 4 * unitY));
+  v.push(createVector(6 * unitX, 11.2 * unitY));
+  v.push(createVector(6.8 * unitX, 13.2 * unitY));
+  v.push(createVector(6.8 * unitX, 16 * unitY));
+  building2 = new Building(v);
 }
 
-function createBuilding3(){
-  const v=[];
-  v.push(createVector(5.5*unitX,16*unitY));
-  v.push(createVector(5.5*unitX,11.8*unitY));
-  v.push(createVector(6*unitX,11.2*unitY));
-  v.push(createVector(6.25*unitX,9*unitY));
-  v.push(createVector(7*unitX,8*unitY));
-  v.push(createVector(7.5*unitX,7*unitY));
-  v.push(createVector(8*unitX,8*unitY));
-  v.push(createVector(8.7*unitX,9*unitY));
-  v.push(createVector(8.7*unitX,10*unitY));
-  v.push(createVector(9.9*unitX,12.5*unitY));
-  v.push(createVector(9.9*unitX,16*unitY));
-  building3=new Building(v);
+function createBuilding3() {
+  const v = [];
+  v.push(createVector(5.5 * unitX, 16 * unitY));
+  v.push(createVector(5.5 * unitX, 11.8 * unitY));
+  v.push(createVector(6 * unitX, 11.2 * unitY));
+  v.push(createVector(6.25 * unitX, 9 * unitY));
+  v.push(createVector(7 * unitX, 8 * unitY));
+  v.push(createVector(7.5 * unitX, 7 * unitY));
+  v.push(createVector(8 * unitX, 8 * unitY));
+  v.push(createVector(8.7 * unitX, 9 * unitY));
+  v.push(createVector(8.7 * unitX, 10 * unitY));
+  v.push(createVector(9.9 * unitX, 12.5 * unitY));
+  v.push(createVector(9.9 * unitX, 16 * unitY));
+  building3 = new Building(v);
 }
 
-function createBuilding4(){
-  const v=[];
-  v.push(createVector(8*unitX,16*unitY));
-  v.push(createVector(8*unitX,11.8*unitY));
-  v.push(createVector(8.7*unitX,10*unitY));
-  v.push(createVector(10*unitX,10*unitY));
-  v.push(createVector(10.5*unitX,11*unitY));
-  v.push(createVector(11.2*unitX,10*unitY));
-  v.push(createVector(11.5*unitX,11*unitY));
-  v.push(createVector(12*unitX,12*unitY));
-  v.push(createVector(13*unitX,13.8*unitY));
-  v.push(createVector(15*unitX,13.8*unitY));
-  v.push(createVector(16*unitX,16*unitY));
-  building4=new Building(v);
+function createBuilding4() {
+  const v = [];
+  v.push(createVector(8 * unitX, 16 * unitY));
+  v.push(createVector(8 * unitX, 11.8 * unitY));
+  v.push(createVector(8.7 * unitX, 10 * unitY));
+  v.push(createVector(10 * unitX, 10 * unitY));
+  v.push(createVector(10.5 * unitX, 11 * unitY));
+  v.push(createVector(11.2 * unitX, 10 * unitY));
+  v.push(createVector(11.5 * unitX, 11 * unitY));
+  v.push(createVector(12 * unitX, 12 * unitY));
+  v.push(createVector(13 * unitX, 13.8 * unitY));
+  v.push(createVector(15 * unitX, 13.8 * unitY));
+  v.push(createVector(16 * unitX, 16 * unitY));
+  building4 = new Building(v);
 }
 
-class Building{
-  constructor(buildingVertices){
-    this.buildingVertices=buildingVertices;
+class Building {
+  constructor(buildingVertices) {
+    this.buildingVertices = buildingVertices;
   }
 
-  draw(){
+  draw() {
     beginShape();
-    for(let v of this.buildingVertices){
-      vertex(v.x,v.y);
+    for (let v of this.buildingVertices) {
+      vertex(v.x, v.y);
     }
     endShape(CLOSE);
   }
 }
 
-function shadow(){
-  const v=[];
-  v.push(createVector(-50,15.5*unitY));
-  v.push(createVector(unitX,15.5*unitY));
-  v.push(createVector(3*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,h));
-  v.push(createVector(6.5*unitX,h));
-  v.push(createVector(6.5*unitX,14.5*unitY));
-  v.push(createVector(8*unitX,15*unitY));
-  v.push(createVector(10*unitX,14.8*unitY));
-  v.push(createVector(11.2*unitX,15.2*unitY));
-  v.push(createVector(12*unitX,15.3*unitY));
-  v.push(createVector(15*unitX,14.3*unitY));
-  v.push(createVector(15.9*unitX,15.5*unitY));
-  polyShadow=new Poly(v);
+function shadow() {
+  const v = [];
+  v.push(createVector(-50, 15.5 * unitY));
+  v.push(createVector(unitX, 15.5 * unitY));
+  v.push(createVector(3 * unitX, 15 * unitY));
+  v.push(createVector(4.9 * unitX, 15 * unitY));
+  v.push(createVector(4.9 * unitX, h));
+  v.push(createVector(6.5 * unitX, h));
+  v.push(createVector(6.5 * unitX, 14.5 * unitY));
+  v.push(createVector(8 * unitX, 15 * unitY));
+  v.push(createVector(10 * unitX, 14.8 * unitY));
+  v.push(createVector(11.2 * unitX, 15.2 * unitY));
+  v.push(createVector(12 * unitX, 15.3 * unitY));
+  v.push(createVector(15 * unitX, 14.3 * unitY));
+  v.push(createVector(15.9 * unitX, 15.5 * unitY));
+  polyShadow = new Poly(v);
 }
 
 //to make the visual effect more vividly, the outline of blurry scenery will be randomly generated
 //but the start and end vertices are fixed to make the transition look more natural
-function blurryBg1(){
-  const v=[];
-  v.push(createVector(16*unitX,16*unitY));
-  for (let i=0;i<random(5);i++){
+function blurryBg1() {
+  const v = [];
+  v.push(createVector(16 * unitX, 16 * unitY));
+  for (let i = 0; i < random(5); i++) {
     //use random scales to achieve the random outline
-    let xScale=random(16,24);
-    let yScale=random(15,16);
-    v.push(createVector(xScale*unitX,yScale*unitY));
+    let xScale = random(16, 24);
+    let yScale = random(15, 16);
+    v.push(createVector(xScale * unitX, yScale * unitY));
   }
-  v.push(createVector(24*unitX,16*unitY));
-  polyBlurry1=new Poly(v);
+  v.push(createVector(24 * unitX, 16 * unitY));
+  polyBlurry1 = new Poly(v);
 }
 
-function blurryBg2(){
-  const v=[];
-  v.push(createVector(24*unitX,16*unitY));
-  let increment=0;
-  for (let i=0;i<random(20);i++){
-    let xScale=constrain(random(24,32)*increment/2,24,82);
-    let yScale=random(15,16);
-    v.push(createVector(xScale*unitX,yScale*unitY));
+function blurryBg2() {
+  const v = [];
+  v.push(createVector(24 * unitX, 16 * unitY));
+  let increment = 0;
+  for (let i = 0; i < random(20); i++) {
+    let xScale = constrain((random(24, 32) * increment) / 2, 24, 82);
+    let yScale = random(15, 16);
+    v.push(createVector(xScale * unitX, yScale * unitY));
     increment++;
   }
-  v.push(createVector(82*unitX,16*unitY));
-  polyBlurry2=new Poly(v);
+  v.push(createVector(82 * unitX, 16 * unitY));
+  polyBlurry2 = new Poly(v);
 }
 
 //reference web for the watercolor part below:
 //https://www.youtube.com/watch?v=olXv8GOfpNw
-class Poly{
-  constructor(vertices,modifiers){
-    this.vertices=vertices;
-    if(!modifiers){
-      modifiers=[];
-      for(let i=0;i<vertices.length;i++){
-        modifiers.push(random(0.01,0.5));
+class Poly {
+  constructor(vertices, modifiers) {
+    this.vertices = vertices;
+    if (!modifiers) {
+      modifiers = [];
+      for (let i = 0; i < vertices.length; i++) {
+        modifiers.push(random(0.01, 0.5));
       }
     }
-    this.modifiers=modifiers;
+    this.modifiers = modifiers;
   }
 
-  grow(){
-    const grownVerts=[];
-    const grownMods=[];
-    for(let i=0;i<this.vertices.length;i++){
-      const j=(i+1)%this.vertices.length;
-      const v1=this.vertices[i];
-      const v2=this.vertices[j];
+  grow() {
+    const grownVerts = [];
+    const grownMods = [];
+    for (let i = 0; i < this.vertices.length; i++) {
+      const j = (i + 1) % this.vertices.length;
+      const v1 = this.vertices[i];
+      const v2 = this.vertices[j];
 
-      const mod=this.modifiers[i];
-      const chmod=m=>{
-        return m+(rand()-0.5)*0.1;
-      }
+      const mod = this.modifiers[i];
+      const chmod = (m) => {
+        return m + (rand() - 0.5) * 0.1;
+      };
 
       grownVerts.push(v1);
       grownMods.push(chmod(mod));
 
-      const segment=p5.Vector.sub(v2,v1);
-      const len=segment.mag();
+      const segment = p5.Vector.sub(v2, v1);
+      const len = segment.mag();
       segment.mult(rand());
 
-      const v=p5.Vector.add(segment,v1);
+      const v = p5.Vector.add(segment, v1);
 
-      segment.rotate(-PI/2+(rand()-0.5)*PI/4);
-      segment.setMag(rand()*len/2*mod);
+      segment.rotate(-PI / 2 + ((rand() - 0.5) * PI) / 4);
+      segment.setMag(((rand() * len) / 2) * mod);
       v.add(segment);
 
       grownVerts.push(v);
       grownMods.push(chmod(mod));
     }
-    return new Poly(grownVerts,grownMods);
+    return new Poly(grownVerts, grownMods);
   }
 
-  dup(){
-    return new Poly(Array.from(this.vertices),Array.from(this.modifiers));
+  dup() {
+    return new Poly(Array.from(this.vertices), Array.from(this.modifiers));
   }
 
-  draw(){
+  draw() {
     beginShape();
-    for(let v of this.vertices){
-      vertex(v.x,v.y);
+    for (let v of this.vertices) {
+      vertex(v.x, v.y);
     }
     endShape(CLOSE);
   }
 }
 
-function waterColor(poly,r,g,b,numLayers,xOffset){
-  fill(r,g,b,255/(2*numLayers));
+function waterColor(poly, r, g, b, numLayers, xOffset) {
+  fill(r, g, b, 255 / (2 * numLayers));
   noStroke();
 
-  poly=poly.grow().grow();
+  poly = poly.grow().grow();
   poly.vertices = poly.vertices.map((v) => createVector(v.x + xOffset, v.y));
 
   //"numLayers" controlls the watercolor rendering effect
   //more layers reinforce the rendering effect
-  for(let i=0;i<numLayers;i++){
-    if(i==int(numLayers/3) || i==int(2*numLayers/3)){
-      poly=poly.grow().grow();
-      poly.vertices = poly.vertices.map((v) => createVector(v.x + xOffset, v.y));
-
+  for (let i = 0; i < numLayers; i++) {
+    if (i == int(numLayers / 3) || i == int((2 * numLayers) / 3)) {
+      poly = poly.grow().grow();
+      poly.vertices = poly.vertices.map((v) =>
+        createVector(v.x + xOffset, v.y)
+      );
     }
     push();
     poly.grow().draw();
@@ -381,58 +397,58 @@ function waterColor(poly,r,g,b,numLayers,xOffset){
   }
 }
 
-function rand(){
+function rand() {
   return distribute(random(1));
 }
 
-function distribute(x){
-  return pow((x-0.5)*1.58740105,3)+0.5;
+function distribute(x) {
+  return pow((x - 0.5) * 1.58740105, 3) + 0.5;
 }
 
 //when mouse is dragged, the sky color will change through the change of the brush size
-function mouseDragged(){
-  let mousePos=map(mouseX,0,w,16,64);
-  brushWidth=height/mousePos;
-  brushAmount=width/brushWidth;
+function mouseDragged() {
+  let mousePos = map(mouseX, 0, w, 16, 64);
+  brushWidth = height / mousePos;
+  brushAmount = width / brushWidth;
 }
 
 //draw the basic sky
-function drawSky(){
-  drawRect(0,0);
-  drawRect(1,7);
-  drawRect(2,14);
-  drawRect(3,21);
-  drawRect(3,28);
-  drawRect(3,35);
-  drawRect(3,42);
-  drawRect(3,49);
+function drawSky() {
+  drawRect(0, 0);
+  drawRect(1, 7);
+  drawRect(2, 14);
+  drawRect(3, 21);
+  drawRect(3, 28);
+  drawRect(3, 35);
+  drawRect(3, 42);
+  drawRect(3, 49);
 }
 
 //num: the number of each pair of sky colors
 //r: rows that need to be drawn
-function drawRect(num,r){
-  for(let i=0;i<7;i++){
-    for (let j=0;j<brushAmount;j++){
-      let amt=i/7;
-      let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num],amt);
+function drawRect(num, r) {
+  for (let i = 0; i < 7; i++) {
+    for (let j = 0; j < brushAmount; j++) {
+      let amt = i / 7;
+      let currentSkyCol = lerpColor(skyColorsFrom[num], skyColorsTo[num], amt);
       fill(currentSkyCol);
-      rect(brushWidth*j,brushWidth*(i+r),brushWidth);
+      rect(brushWidth * j, brushWidth * (i + r), brushWidth);
     }
   }
 }
 
 //the water surface
-function waterSurface(){
+function waterSurface() {
   push();
   randomSeed(45);
-  translate(0, windowHeight/ 2);
+  translate(0, windowHeight / 2);
   let yoff = 0;
   for (let y = 0; y < rows / 2; y++) {
-    let xoff= 0;
+    let xoff = 0;
     for (let x = 0; x < cols; x++) {
       let angle = noise(xoff, yoff) * TWO_PI;
       let v = p5.Vector.fromAngle(angle * -0.2);
-      xoff += mouseX/100;
+      xoff += mouseX / 100;
       noStroke();
       push();
       translate(x * scl, y * scl);
@@ -443,22 +459,16 @@ function waterSurface(){
 
     //fill different colors into different parts of the surface
     if (y < 14) {
-      fill(waterColorsLerpA[y%8]);
-    } 
-
-    else if (y>=14 && y<27){
-      fill(waterColorsLerpB[y % 8]);  
-    }
-    else if (y>=27 && y<=50) {
+      fill(waterColorsLerpA[y % 8]);
+    } else if (y >= 14 && y < 27) {
+      fill(waterColorsLerpB[y % 8]);
+    } else if (y >= 27 && y <= 50) {
       fill(waterColorsLerpC[y % 8]);
- 
-    } 
-    else {
+    } else {
       fill(waterColorsLerpD[y % 8]);
-      
     }
-    //yoff += inc; 
-    yoff+=mouseY/100;
+    //yoff += inc;
+    yoff += mouseY / 100;
   }
   //reference web:https://www.youtube.com/watch?v=BjoM9oKOAKY&t=3s.
   pop();
