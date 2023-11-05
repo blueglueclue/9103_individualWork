@@ -158,15 +158,24 @@ function draw() {
 
   waterSurface();
 
-  //color of building
-  fill(71,41,50);
-  strokeWeight(2);
-  stroke(43,49,45);
+  // //color of building
+  // fill(71,41,50);
+  // strokeWeight(2);
+  // stroke(43,49,45);
+
+  noStroke();
 
   //drawBuilding(mouseXOffset);
-  drawBuilding(mouseXOffset, building1);
-  drawBuilding(mouseXOffset, building2);
-  drawBuilding(mouseXOffset, building3);
+  fill(94,63,79);
+  drawBuilding(mouseXOffset*3, building1);
+
+  fill(104,51,33);
+  drawBuilding(mouseXOffset*2.5, building2);
+
+  fill(33,74,88);
+  drawBuilding(mouseXOffset*2, building3);
+
+  fill(130,65,46);
   drawBuilding(mouseXOffset, building4);
  
   waterColor(polyShadow,71,41,50,20,mouseXOffset);
@@ -218,73 +227,69 @@ function drawBuilding(xOffset,building){
 
 function createBuilding1(){
   const v=[];
-  v.push(createVector(-50,15.5*unitY));
-  v.push(createVector(unitX,15.5*unitY));
-  v.push(createVector(3*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,h));
-  v.push(createVector(6.5*unitX,h));
-  v.push(createVector(6.5*unitX,14.5*unitY));
-  v.push(createVector(8*unitX,15*unitY));
-  v.push(createVector(10*unitX,14.8*unitY));
-  v.push(createVector(11.2*unitX,15.2*unitY));
-  v.push(createVector(12*unitX,15.3*unitY));
-  v.push(createVector(15*unitX,14.3*unitY));
-  v.push(createVector(15.9*unitX,15.5*unitY));
+  v.push(createVector(-150,16*unitY));
+  v.push(createVector(-50,13.8*unitY));
+  v.push(createVector(-26,13.8*unitY));
+  v.push(createVector(-26,12*unitY));
+  v.push(createVector(-1,12*unitY));
+  v.push(createVector(-1,13.8*unitY));
+  v.push(createVector(unitX,13.8*unitY));
+  v.push(createVector(2*unitX,11*unitY));
+  v.push(createVector(3*unitX,11*unitY));
+  v.push(createVector(3.4*unitX,9*unitY));
+  v.push(createVector(4*unitX,11*unitY));
+  v.push(createVector(4.7*unitX,11*unitY));
+  v.push(createVector(5.1*unitX,12*unitY));
+  v.push(createVector(5.1*unitX,16*unitY));
   building1=new Building(v);
 }
 
 function createBuilding2(){
   const v=[];
-  v.push(createVector(-50,15.5*unitY));
-  v.push(createVector(unitX,15.5*unitY));
-  v.push(createVector(3*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,h));
-  v.push(createVector(6.5*unitX,h));
-  v.push(createVector(6.5*unitX,14.5*unitY));
-  v.push(createVector(8*unitX,15*unitY));
-  v.push(createVector(10*unitX,14.8*unitY));
-  v.push(createVector(11.2*unitX,15.2*unitY));
-  v.push(createVector(12*unitX,15.3*unitY));
-  v.push(createVector(15*unitX,14.3*unitY));
-  v.push(createVector(15.9*unitX,15.5*unitY));
+  v.push(createVector(3.2*unitX,16*unitY));
+  v.push(createVector(3.2*unitX,13*unitY));
+  v.push(createVector(4.7*unitX,11*unitY));
+  v.push(createVector(4.7*unitX,4*unitY));
+  v.push(createVector(4.9*unitX,4*unitY));
+  v.push(createVector(5.15*unitX,0.5*unitY));
+  v.push(createVector(5.35*unitX,0.5*unitY));
+  v.push(createVector(5.75*unitX,3*unitY));
+  v.push(createVector(6*unitX,4*unitY));
+  v.push(createVector(6*unitX,11.2*unitY));
+  v.push(createVector(6.8*unitX,13.2*unitY));
+  v.push(createVector(6.8*unitX,16*unitY));
   building2=new Building(v);
 }
 
 function createBuilding3(){
   const v=[];
-  v.push(createVector(-50,15.5*unitY));
-  v.push(createVector(unitX,15.5*unitY));
-  v.push(createVector(3*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,h));
-  v.push(createVector(6.5*unitX,h));
-  v.push(createVector(6.5*unitX,14.5*unitY));
-  v.push(createVector(8*unitX,15*unitY));
-  v.push(createVector(10*unitX,14.8*unitY));
-  v.push(createVector(11.2*unitX,15.2*unitY));
-  v.push(createVector(12*unitX,15.3*unitY));
-  v.push(createVector(15*unitX,14.3*unitY));
-  v.push(createVector(15.9*unitX,15.5*unitY));
+  v.push(createVector(5.5*unitX,16*unitY));
+  v.push(createVector(5.5*unitX,11.8*unitY));
+  v.push(createVector(6*unitX,11.2*unitY));
+  v.push(createVector(6.25*unitX,9*unitY));
+  v.push(createVector(7*unitX,8*unitY));
+  v.push(createVector(7.5*unitX,7*unitY));
+  v.push(createVector(8*unitX,8*unitY));
+  v.push(createVector(8.7*unitX,9*unitY));
+  v.push(createVector(8.7*unitX,10*unitY));
+  v.push(createVector(9.9*unitX,12.5*unitY));
+  v.push(createVector(9.9*unitX,16*unitY));
   building3=new Building(v);
 }
 
 function createBuilding4(){
   const v=[];
-  v.push(createVector(-50,15.5*unitY));
-  v.push(createVector(unitX,15.5*unitY));
-  v.push(createVector(3*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,15*unitY));
-  v.push(createVector(4.9*unitX,h));
-  v.push(createVector(6.5*unitX,h));
-  v.push(createVector(6.5*unitX,14.5*unitY));
-  v.push(createVector(8*unitX,15*unitY));
-  v.push(createVector(10*unitX,14.8*unitY));
-  v.push(createVector(11.2*unitX,15.2*unitY));
-  v.push(createVector(12*unitX,15.3*unitY));
-  v.push(createVector(15*unitX,14.3*unitY));
-  v.push(createVector(15.9*unitX,15.5*unitY));
+  v.push(createVector(8*unitX,16*unitY));
+  v.push(createVector(8*unitX,11.8*unitY));
+  v.push(createVector(8.7*unitX,10*unitY));
+  v.push(createVector(10*unitX,10*unitY));
+  v.push(createVector(10.5*unitX,11*unitY));
+  v.push(createVector(11.2*unitX,10*unitY));
+  v.push(createVector(11.5*unitX,11*unitY));
+  v.push(createVector(12*unitX,12*unitY));
+  v.push(createVector(13*unitX,13.8*unitY));
+  v.push(createVector(15*unitX,13.8*unitY));
+  v.push(createVector(16*unitX,16*unitY));
   building4=new Building(v);
 }
 
@@ -513,6 +518,11 @@ function updateDimensions() {
   shadow();
   blurryBg1();
   blurryBg2();
+
+  createBuilding1();
+  createBuilding2();
+  createBuilding3();
+  createBuilding4();
 }
 
 function updateWater(){
