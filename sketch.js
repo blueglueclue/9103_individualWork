@@ -405,8 +405,8 @@ function distribute(x) {
   return pow((x - 0.5) * 1.58740105, 3) + 0.5;
 }
 
-//when mouse is dragged, the sky color will change through the change of the brush size
 function mouseDragged() {
+  //when mouse is dragged, the sky color will change through the change of the brush size
   let mousePos = map(mouseX, 0, w, 16, 64);
   brushWidth = height / mousePos;
   brushAmount = width / brushWidth;
@@ -427,11 +427,15 @@ function drawSky() {
 //num: the number of each pair of sky colors
 //r: rows that need to be drawn
 function drawRect(num, r) {
-  for (let i = 0; i < 7; i++) {
+  //"i" for each column, "j" for each row
+  for (let i = 0; i < 7; i++) {//there are 7 rows for each part
     for (let j = 0; j < brushAmount; j++) {
+      //the interpolate amt depends on the number of rows
       let amt = i / 7;
+      //every row has one specific color
       let currentSkyCol = lerpColor(skyColorsFrom[num], skyColorsTo[num], amt);
       fill(currentSkyCol);
+      //draw rectangles for each row
       rect(brushWidth * j, brushWidth * (i + r), brushWidth);
     }
   }
