@@ -160,10 +160,10 @@ function draw() {
 
   // //color of building
   // fill(71,41,50);
-  // strokeWeight(2);
-  // stroke(43,49,45);
+  strokeWeight(2);
+  stroke(43,49,45,120);
 
-  noStroke();
+  //noStroke();
 
   //drawBuilding(mouseXOffset);
   fill(94,63,79);
@@ -185,44 +185,10 @@ function draw() {
 
 
 function drawBuilding(xOffset,building){
-
   push();
   translate(xOffset,0);
   building.draw();
   pop();
-  //  //the building
-  //  beginShape();
-  //  vertex(-50,16*unitY);
-  //  vertex(0,13.8*unitY);
-  //  vertex(unitX,13.8*unitY);
-  //  vertex(2*unitX,11*unitY);
-  //  vertex(3*unitX,11*unitY);
-  //  vertex(3.4*unitX,9*unitY);
-  //  vertex(4*unitX,11*unitY);
-  //  vertex(4.7*unitX,10.5*unitY);
-  //  vertex(4.7*unitX,4*unitY);
-  //  vertex(4.9*unitX,4*unitY);
-  //  vertex(5.15*unitX,0.5*unitY);
-  //  vertex(5.35*unitX,0.5*unitY);
-  //  vertex(5.75*unitX,3*unitY);
-  //  vertex(6*unitX,4*unitY);
-  //  vertex(6*unitX,11*unitY);
-  //  vertex(6.25*unitX,9*unitY);
-  //  vertex(7*unitX,8*unitY);
-  //  vertex(7.5*unitX,7*unitY);
-  //  vertex(8*unitX,8*unitY);
-  //  vertex(8.7*unitX,9*unitY);
-  //  vertex(8.7*unitX,10*unitY);
-  //  vertex(10*unitX,10*unitY);
-  //  vertex(10.5*unitX,11*unitY);
-  //  vertex(11.2*unitX,10*unitY);
-  //  vertex(11.5*unitX,11*unitY);
-  //  vertex(12*unitX,12*unitY);
-  //  vertex(13*unitX,13.8*unitY);
-  //  vertex(15*unitX,13.8*unitY);
-  //  vertex(16*unitX,16*unitY);
-  //  endShape(CLOSE);
-  //  pop();
 }
 
 function createBuilding1(){
@@ -293,6 +259,20 @@ function createBuilding4(){
   building4=new Building(v);
 }
 
+class Building{
+  constructor(buildingVertices){
+    this.buildingVertices=buildingVertices;
+  }
+
+  draw(){
+    beginShape();
+    for(let v of this.buildingVertices){
+      vertex(v.x,v.y);
+    }
+    endShape(CLOSE);
+  }
+}
+
 function shadow(){
   const v=[];
   v.push(createVector(-50,15.5*unitY));
@@ -336,20 +316,6 @@ function blurryBg2(){
   }
   v.push(createVector(82*unitX,16*unitY));
   polyBlurry2=new Poly(v);
-}
-
-class Building{
-  constructor(buildingVertices){
-    this.buildingVertices=buildingVertices;
-  }
-
-  draw(){
-    beginShape();
-    for(let v of this.buildingVertices){
-      vertex(v.x,v.y);
-    }
-    endShape(CLOSE);
-  }
 }
 
 class Poly{
@@ -449,9 +415,14 @@ function drawSkyEllipse() {
     }
   }
   drawEllipse(skyLerpEllipseA,skyColorsLerpA,1);
+  drawRect(0,0);
   drawEllipse(skyLerpEllipseB,skyColorsLerpB,9);
+  drawRect(1,7);
   drawEllipse(skyLerpEllipseC,skyColorsLerpC,17);
+  drawRect(2,14);
   drawEllipse(skyLerpEllipseD,skyColorsLerpD,25);
+  drawRect(3,21);
+  drawRect(3,25);
 }
 
 //draw ellipses between each two basic color lines
@@ -465,6 +436,31 @@ function drawEllipse(lerpEllipse,colorArray,r){
     }
   }
 }
+
+//num: the number of each pair of sky colors
+function drawRect(num,r){
+  for(let i=0;i<7;i++){
+    for (let j=0;j<brushAmount;j++){
+      let amt=i/7;
+      let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num],amt);
+      fill(currentSkyCol);
+      rect(brushWidth*j,brushWidth*(i+r),brushWidth);
+    }
+  }
+  // for (let i=0;i<(h/8);i++){
+  //   let amt=i/20;
+  //   let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num],amt);
+  //   fill(currentSkyCol);
+  //   rect()
+  // }
+  //let currentSkyCol=lerpColor(skyColorsFrom[num],skyColorsTo[num])
+}
+// function generateColor(type,colorLerp,num,r){
+//   if(type==1){
+//     for (let i=1;i<r;i++){
+//       colorLerp.push(lerpColor(skyColorsFrom[num],skyColorsTo[num],i*0.125));
+//     }
+//   }
 
 function waterSurface(){
   push();
