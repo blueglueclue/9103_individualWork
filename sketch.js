@@ -186,7 +186,7 @@ function drawBuilding(xOffset, building) {
   pop();
 }
 
-//hard-code the outline of the buildings
+//hard-code the contour of the buildings
 function createBuilding1() {
   const v = [];
   v.push(createVector(-150, 16 * unitY));
@@ -287,13 +287,13 @@ function shadow() {
   polyShadow = new Poly(v);
 }
 
-//to make the visual effect more vividly, the outline of blurry scenery will be randomly generated
+//to make the visual effect more vividly, the contour of blurry scenery will be randomly generated
 //but the start and end vertices are fixed to make the transition look more natural
 function blurryBg1() {
   const v = [];
   v.push(createVector(16 * unitX, 16 * unitY));
   for (let i = 0; i < random(5); i++) {
-    //use random scales to achieve the random outline
+    //use random scales to achieve the random contour
     let xScale = random(16, 24);
     let yScale = random(15, 16);
     v.push(createVector(xScale * unitX, yScale * unitY));
